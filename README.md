@@ -17,8 +17,14 @@
     ```sh
     vim .env
     ```
+   
+3. Criar pasta app
 
-3. Rodar comndo docker-compose
+    ```sh
+    mkdir app
+    ```
+
+4. Rodar comndo docker-compose
     
     ```sh
    docker-compose up -d
