@@ -61,6 +61,16 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN rm -Rf /var/www/html
 
+USER root
+
+ARG UID=1000
+ARG GID=1000
+
+RUN groupmod -o -g ${GID} www-data && \
+    usermod -o -u ${UID} -g www-data www-data
+
+USER root
+
 RUN chown -R www-data:www-data /var/www
 
 RUN apk update && apk add --no-cache supervisor
@@ -70,11 +80,5 @@ WORKDIR /etc/supervisor/conf.d/
 COPY supervisord.conf /etc/supervisord.conf
 
 COPY ./supervisord.d /etc/supervisord.d
-
-ARG UID=1000
-ARG GID=1000
-
-RUN groupmod -o -g ${GID} www-data && \
-    usermod -o -u ${UID} -g www-data www-data
 
 ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
