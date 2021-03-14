@@ -1,11 +1,25 @@
-## Build Nginx
+## Requisitos
+- Docker
+- Docker Compose
+- Traefik    
 
-`` docker build -f NGINX/Dockerfile -t user/name_image:tag .``
+## Iniciar Serviços
 
-## Build PHP
+1. Criar arquivo .env
 
-``  docker build --build-arg PHP_VERSION=8 -f PHP/Dockerfile -t user/name_image:tag .``
+    ```sh 
+    cp .env-exemple .env
+    ```
 
-## Build PHP WORKER
 
-`` docker build --build-arg PHP_VERSION=8 -f PHP-WORKER/Dockerfile -t user/name_image:tag .``
+2. Editar arquivo .env com informações do projeto
+
+    ```sh
+    vim .env
+    ```
+
+3. Rodar comndo docker-compose
+    
+    ```sh
+   docker-compose up -d
+    ```

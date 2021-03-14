@@ -1,0 +1,119 @@
+version: '3.5'
+
+networks:
+  ${TRAEFIK_NETWORK}:
+    external:
+      name: ${TRAEFIK_NETWORK}
+  ${PROJECT_NAME}_network:
+    name: ${PROJECT_NAME}_network
+    driver: bridge
+
+services:
+
+  #  The Application
+  app:
+    container_name: ${PROJECT_NAME}_app
+    restart: always
+    build: .
+      context: ./PHP
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+    volumes:
+      - app:/var/www
+      - ./ssh:/home/www-data/.ssh
+    networks:
+      - ${PROJECT_NAME}_network
+
+  # The Web Server
+  web:
+    container_name: ${PROJECT_NAME}_web
+    restart: always
+    build: .
+      context: ./NGINX
+      dockerfile: Dockerfile
+    volumes:
+      - ./nginx/logs/:/var/log/nginx
+      - app:/var/www
+    #ports:
+    #  - 80:80
+    networks:
+      - ${TRAEFIK_NETWORK}
+      - ${PROJECT_NAME}_network
+    depends_on:
+      - app
+    labels:
+      #### Labels define the behavior and rules of the traefik proxy for this container ####
+      - "traefik.enable=true" # <== Enable traefik to proxy this container
+      - "traefik.http.routers.${PROJECT_NAME}-web.rule=Host(${PROJECT_DOMAIN})" # <== Your Domain Name goes here for the http rule
+      - "traefik.http.routers.${PROJECT_NAME}-web.entrypoints=web" # <== Defining the entrypoint for http, **ref: line 30
+      - "traefik.http.routers.${PROJECT_NAME}-web.middlewares=https-redirect" # <== This is a middleware to redirect to https
+      - "traefik.http.routers.${PROJECT_NAME}-secured.rule=Host(${PROJECT_DOMAIN})" # <== Your Domain Name for the https rule
+      - "traefik.http.routers.${PROJECT_NAME}-secured.entrypoints=web-secured" # <== Defining entrypoint for https, **ref: line 31
+      - "traefik.http.routers.${PROJECT_NAME}-secured.tls.certresolver=mytlschallenge" # <== Defining certsresolvers for https
+      - "traefik.docker.network=${TRAEFIK_NETWORK}"
+
+  #The Worker
+  worker:
+    container_name: ${PROJECT_NAME}_worker
+    restart: always
+    build: .
+      context: ./PHP-WORKER
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+    volumes:
+      - app:/var/www
+      - ./supervisord.d:/etc/supervisord.d
+    networks:
+      - ${PROJECT_NAME}_network
+
+  # The Redis - Queue, Session, Cache
+  redis:
+    container_name: ${PROJECT_NAME}_redis
+    restart: always
+    image: redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis:/data
+    networks:
+      - ${PROJECT_NAME}_network
+
+  # The Database
+  db:
+    container_name: ${PROJECT_NAME}_db
+    restart: always
+    image: mariadb:latest
+    volumes:
+      - db:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    environment:
+      - TZ=America/Sao_Paulo
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    ports:
+      - 3306:3306
+    networks:
+      - ${PROJECT_NAME}_network
+
+volumes:
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PROJECT_PATH}/db
+      o: bind
+  app:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PROJECT_PATH}/app
+      o: bind
+  redis:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PROJECT_PATH}/redis
+      o: bind
