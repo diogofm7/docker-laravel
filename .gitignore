@@ -6,4 +6,4 @@ redis/
 db/
 ssh/
 nginx/
-supervisord.d/
+PHP-WORKER/supervisord.d/

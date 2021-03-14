@@ -64,7 +64,7 @@ services:
         PHP_VERSION: ${PHP_VERSION}
     volumes:
       - app:/var/www
-      - ./supervisord.d:/etc/supervisord.d
+      #- ./supervisord.d:/etc/supervisord.d
     networks:
       - project_network
 
