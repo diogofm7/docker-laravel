@@ -15,7 +15,7 @@ services:
     container_name: ${PROJECT_NAME}_app
     restart: always
     build:
-      context: ./PHP
+      context: DOCKERFILES/PHP
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${PHP_VERSION}
@@ -32,7 +32,7 @@ services:
     container_name: ${PROJECT_NAME}_web
     restart: always
     build:
-      context: ./NGINX
+      context: DOCKERFILES/NGINX
       dockerfile: Dockerfile
     volumes:
       - ./nginx/logs/:/var/log/nginx
@@ -60,7 +60,7 @@ services:
     container_name: ${PROJECT_NAME}_worker
     restart: always
     build:
-      context: ./PHP-WORKER
+      context: DOCKERFILES/PHP-WORKER
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${PHP_VERSION}

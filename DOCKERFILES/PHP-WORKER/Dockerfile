@@ -79,6 +79,6 @@ WORKDIR /etc/supervisor/conf.d/
 
 COPY supervisord.conf /etc/supervisord.conf
 
-COPY ./supervisord.d /etc/supervisord.d
+COPY supervisord.d /etc/supervisord.d
 
 ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
