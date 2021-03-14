@@ -62,4 +62,10 @@ RUN rm -Rf /var/www/html
 
 RUN chown -R www-data:www-data /var/www
 
+ARG UID=1000
+ARG GID=1000
+
+RUN groupmod -o -g ${GID} www-data && \
+    usermod -o -u ${UID} -g www-data www-data
+
 WORKDIR /var/www

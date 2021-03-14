@@ -70,4 +70,10 @@ COPY supervisord.conf /etc/supervisord.conf
 
 COPY ./supervisord.d /etc/supervisord.d
 
+ARG UID=1000
+ARG GID=1000
+
+RUN groupmod -o -g ${GID} www-data && \
+    usermod -o -u ${UID} -g www-data www-data
+
 ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
