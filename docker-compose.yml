@@ -13,6 +13,7 @@ services:
   #  The Application
   app:
     container_name: ${PROJECT_NAME}_app
+    image: ${PROJECT_NAME}_app
     restart: always
     build:
       context: DOCKERFILES/PHP
@@ -30,6 +31,7 @@ services:
   # The Web Server
   web:
     container_name: ${PROJECT_NAME}_web
+    image: ${PROJECT_NAME}_web
     restart: always
     build:
       context: DOCKERFILES/NGINX
@@ -58,6 +60,7 @@ services:
   #The Worker
   worker:
     container_name: ${PROJECT_NAME}_worker
+    image: ${PROJECT_NAME}_worker
     restart: always
     build:
       context: DOCKERFILES/PHP-WORKER
