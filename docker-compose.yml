@@ -67,6 +67,7 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${PHP_VERSION}
+        PROJECT_NAME: ${PROJECT_NAME}
         GID: ${GID}
         UID: ${UID}
     volumes:
