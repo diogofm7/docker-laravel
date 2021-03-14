@@ -19,8 +19,10 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${PHP_VERSION}
+        GID: ${GID}
+        UID: ${UID}
     volumes:
-      - app:/var/www
+      - ./app:/var/www
       - ./ssh:/home/www-data/.ssh
     networks:
       - project_network
@@ -34,7 +36,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./nginx/logs/:/var/log/nginx
-      - app:/var/www
+      - ./app:/var/www
     #ports:
     #  - 80:80
     networks:
@@ -62,8 +64,10 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${PHP_VERSION}
+        GID: ${GID}
+        UID: ${UID}
     volumes:
-      - app:/var/www
+      - ./app:/var/www
       #- ./supervisord.d:/etc/supervisord.d
     networks:
       - project_network
@@ -75,7 +79,7 @@ services:
     image: redis
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
     volumes:
-      - redis:/data
+      - ./redis:/data
     networks:
       - project_network
 
@@ -85,7 +89,7 @@ services:
     restart: always
     image: mariadb:latest
     volumes:
-      - db:/var/lib/mysql
+      - ./db:/var/lib/mysql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     environment:
       - TZ=America/Sao_Paulo
@@ -97,23 +101,3 @@ services:
       - 3306:3306
     networks:
       - project_network
-
-volumes:
-  db:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PROJECT_PATH}/db
-      o: bind
-  app:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PROJECT_PATH}/app
-      o: bind
-  redis:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PROJECT_PATH}/redis
-      o: bind
