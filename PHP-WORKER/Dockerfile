@@ -4,6 +4,7 @@ FROM php:${PHP_VERSION}-fpm-alpine
 
 RUN apk update \
                 && apk add --no-cache util-linux \
+                shadow \
                 git \
                 zip \
                 openssh \
