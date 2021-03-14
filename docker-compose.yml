@@ -1,10 +1,10 @@
 version: '3.5'
 
 networks:
-  ${TRAEFIK_NETWORK}:
+  traefik_network:
     external:
       name: ${TRAEFIK_NETWORK}
-  ${PROJECT_NAME}_network:
+  project_network:
     name: ${PROJECT_NAME}_network
     driver: bridge
 
@@ -14,7 +14,7 @@ services:
   app:
     container_name: ${PROJECT_NAME}_app
     restart: always
-    build: .
+    build:
       context: ./PHP
       dockerfile: Dockerfile
       args:
@@ -23,13 +23,13 @@ services:
       - app:/var/www
       - ./ssh:/home/www-data/.ssh
     networks:
-      - ${PROJECT_NAME}_network
+      - project_network
 
   # The Web Server
   web:
     container_name: ${PROJECT_NAME}_web
     restart: always
-    build: .
+    build:
       context: ./NGINX
       dockerfile: Dockerfile
     volumes:
@@ -38,8 +38,8 @@ services:
     #ports:
     #  - 80:80
     networks:
-      - ${TRAEFIK_NETWORK}
-      - ${PROJECT_NAME}_network
+      - traefik_network
+      - project_network
     depends_on:
       - app
     labels:
@@ -57,7 +57,7 @@ services:
   worker:
     container_name: ${PROJECT_NAME}_worker
     restart: always
-    build: .
+    build:
       context: ./PHP-WORKER
       dockerfile: Dockerfile
       args:
@@ -66,7 +66,7 @@ services:
       - app:/var/www
       - ./supervisord.d:/etc/supervisord.d
     networks:
-      - ${PROJECT_NAME}_network
+      - project_network
 
   # The Redis - Queue, Session, Cache
   redis:
@@ -77,7 +77,7 @@ services:
     volumes:
       - redis:/data
     networks:
-      - ${PROJECT_NAME}_network
+      - project_network
 
   # The Database
   db:
@@ -96,7 +96,7 @@ services:
     ports:
       - 3306:3306
     networks:
-      - ${PROJECT_NAME}_network
+      - project_network
 
 volumes:
   db:
