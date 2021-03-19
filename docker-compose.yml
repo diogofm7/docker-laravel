@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${PHP_VERSION}
-    user: "${UID}:${GID}"
+    user: "$(id -u):$(id -g)"
     volumes:
       - ./app:/var/www
       - ./ssh:/home/www-data/.ssh
