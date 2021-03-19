@@ -22,7 +22,7 @@ services:
         PHP_VERSION: ${PHP_VERSION}
     user: "${UID}:${GID}"
     volumes:
-      - ./app:/var/www
+      - ${PATH_PROJECT}:/var/www
       - ./ssh:/home/www-data/.ssh
     networks:
       - project_network
@@ -37,7 +37,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./nginx/logs/:/var/log/nginx
-      - ./app:/var/www
+      - ${PATH_PROJECT}:/var/www
     #ports:
     #  - 80:80
     networks:
@@ -70,7 +70,7 @@ services:
     environment:
       - NUM_PROCS=${NUM_PROCS}
     volumes:
-      - ./app:/var/www
+      - ${PATH_PROJECT}:/var/www
       #- ./supervisord.d:/etc/supervisord.d
     networks:
       - project_network
