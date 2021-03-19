@@ -70,6 +70,8 @@ RUN groupmod -o -g ${GID} www-data && \
 
 RUN chown -R www-data:www-data /var/www
 
+RUN touch /home/www-data/teste.txt
+
 USER www-data
 
 WORKDIR /var/www
