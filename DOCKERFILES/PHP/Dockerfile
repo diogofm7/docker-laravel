@@ -61,6 +61,6 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN mkdir /.composer && \
-    mhmod 777 /.composer
+    chmod 777 /.composer
 
 WORKDIR /var/www
