@@ -2,7 +2,7 @@ ARG PROJECT_NAME
 
 FROM ${PROJECT_NAME}_app
 
-USER root
+#USER root
 
 RUN apk update && apk add --no-cache supervisor
 
