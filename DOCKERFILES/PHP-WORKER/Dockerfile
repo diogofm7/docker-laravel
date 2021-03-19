@@ -1,6 +1,6 @@
-ARG PROJECT_NAME
+ARG PHP_VERSION=7.4
 
-FROM ${PROJECT_NAME}_app
+FROM diogofm7/php-fpm:${PHP_VERSION}-alpine
 
 RUN apk update && apk add --no-cache supervisor
 
