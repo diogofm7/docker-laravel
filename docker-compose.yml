@@ -20,8 +20,7 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${PHP_VERSION}
-        GID: ${GID}
-        UID: ${UID}
+    user: "${UID}:${GID}"
     volumes:
       - ./app:/var/www
       - ./ssh:/home/www-data/.ssh
@@ -68,7 +67,6 @@ services:
       args:
         PHP_VERSION: ${PHP_VERSION}
         PROJECT_NAME: ${PROJECT_NAME}
-    user: "${UID}:${GID}"
     environment:
       - NUM_PROCS=${NUM_PROCS}
     volumes:
