@@ -2,6 +2,8 @@ ARG PROJECT_NAME
 
 FROM ${PROJECT_NAME}_app
 
+USER root
+
 RUN apk update && apk add --no-cache supervisor
 
 WORKDIR /etc/supervisor/conf.d/
