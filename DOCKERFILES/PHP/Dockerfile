@@ -48,7 +48,7 @@ RUN apk update && apk add --no-cache \
     && docker-php-ext-install -j$(nproc) gd
 
 #### INSTALL REDIS ####
-RUN apk update && apk add --no-cache autoconf gcc make cmake g++ zlib-dev automake
+RUN apk update && apk add --no-cache autoconf gcc make g++ zlib-dev
 RUN pecl install -o -f redis \
         &&  rm -rf /tmp/pear \
         &&  docker-php-ext-enable redis
