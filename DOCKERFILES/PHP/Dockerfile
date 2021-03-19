@@ -62,16 +62,14 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN rm -Rf /var/www/html
 
-USER root
-
 ARG UID=1000
 ARG GID=1000
 
 RUN groupmod -o -g ${GID} www-data && \
     usermod -o -u ${UID} -g www-data www-data
 
-USER root
-
 RUN chown -R www-data:www-data /var/www
+
+USER www-data
 
 WORKDIR /var/www
