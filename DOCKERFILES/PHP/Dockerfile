@@ -60,18 +60,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
-#RUN rm -Rf /var/www/html
-#
-#ARG UID=1000
-#ARG GID=1000
-#
-#RUN groupmod -o -g ${GID} www-data && \
-#    usermod -o -u ${UID} -g www-data www-data
-#
-#RUN chown -R www-data:www-data /var/www
-#
-#USER www-data
-#
-#RUN touch /home/www-data/teste.txt
+RUN mkdir /.composer && \
+    mhmod 777 /.composer
 
 WORKDIR /var/www
