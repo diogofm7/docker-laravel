@@ -10,4 +10,6 @@ COPY supervisord.conf /etc/supervisord.conf
 
 COPY supervisord.d /etc/supervisord.d
 
+RUN ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && echo America/Sao_Paulo > /etc/timezone
+
 ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]

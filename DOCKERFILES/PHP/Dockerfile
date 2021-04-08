@@ -63,4 +63,6 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 RUN mkdir /.composer && \
     chmod 777 /.composer
 
+RUN ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && echo America/Sao_Paulo > /etc/timezone
+
 WORKDIR /var/www
